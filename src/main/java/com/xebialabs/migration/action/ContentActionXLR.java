@@ -1,0 +1,71 @@
+package com.xebialabs.migration.action;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class ContentActionXLR implements Comparable<RepositoryAction>
+{
+    private Integer order;
+    private ContentActionType action;
+    private Map<String,String> properties;
+
+    public ContentActionXLR(Integer order, ContentActionType action)
+    {
+        this.order = order;
+        this.action = action;
+        this.properties = new HashMap<String,String>();
+    }
+
+    public ContentActionXLR(Integer order, ContentActionType action, Map<String,String> properties)
+    {
+        this.order = order;
+        this.action = action;
+        this.properties = properties;
+    }
+
+    public Integer getOrder()
+    {
+        return this.order;
+    }
+
+    public ContentActionType getAction()
+    {
+        return this.action;
+    }
+
+
+    public Map<String,String> getProperties()
+    {
+        if (this.properties == null){
+            this.properties = new HashMap<String,String>();
+        }
+        return this.properties;
+    }
+
+    public void addProperty(String name, String value)
+    {
+        this.properties.put(name, value);
+    }
+
+
+    public void assertHasProperty(String propname) throws IllegalArgumentException
+    {
+        if ( this.properties.containsKey(propname) == false )
+        {
+            String msg = String.format("ContentActionXLR %s does not have required property '%s'", this.action.name(),  propname);
+            throw new IllegalArgumentException(msg);
+        }
+    }
+
+
+	@Override
+	public int compareTo(RepositoryAction o) {
+		return this.order.compareTo(o.getOrder());
+    }
+    
+    @Override
+	public String toString() {
+        
+        return ("order = "+this.order+", action = "+this.action.name()+", properties = "+this.properties);
+	}
+}

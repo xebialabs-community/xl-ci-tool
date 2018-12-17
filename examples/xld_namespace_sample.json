@@ -1,0 +1,126 @@
+{
+    "systemType": "xld",
+    "description": "example migration script for customized OpenShift plugin to avoid collision with latest official openshift plugin",
+    "actions": [
+        {
+            "order": 1,
+            "action": "update",
+            "type": "ci",
+            "description": "migrate existing type to new type to avoid collision with v8",
+            "properties": {
+                "oldValue": "openshift.Server",
+                "newValue": "openshift6.Server"
+            }
+        },
+        {
+            "order": 2,
+            "action": "update",
+            "type": "ci",
+            "description": "migrate existing type to new type to avoid collision with v8",
+            "properties": {
+                "oldValue": "openshift.Project",
+                "newValue": "openshift6.Project"
+            }
+        },
+        {
+            "order": 3,
+            "action": "update",
+            "type": "ci",
+            "description": "migrate existing type to new type to avoid collision with v8",
+            "properties": {
+                "oldValue": "openshift.Credential",
+                "newValue": "openshift6.Credential"
+            }
+        },
+        {
+            "order": 4,
+            "action": "update",
+            "type": "ci",
+            "description": "migrate existing type to new type to avoid collision with v8",
+            "properties": {
+                "oldValue": "openshift.App",
+                "newValue": "openshift6.App"
+            }
+        },
+        {
+            "order": 5,
+            "action": "update",
+            "type": "ci",
+            "description": "migrate existing type to new type to avoid collision with v8",
+            "properties": {
+                "oldValue": "openshift.BinaryApp",
+                "newValue": "openshift6.BinaryApp"
+            }
+        },
+        {
+            "order": 6,
+            "action": "update",
+            "type": "ci",
+            "description": "migrate existing type to new type to avoid collision with v8",
+            "properties": {
+                "oldValue": "openshift.DockerfileApp",
+                "newValue": "openshift6.DockerfileApp"
+            }
+        },
+        {
+            "order": 7,
+            "action": "update",
+            "type": "ci",
+            "description": "migrate existing type to new type to avoid collision with v8",
+            "properties": {
+                "oldValue": "openshift.Resource",
+                "newValue": "openshift6.Resource"
+            }
+        },
+        {
+            "order": 8,
+            "action": "update",
+            "type": "ci",
+            "description": "migrate existing type to new type to avoid collision with v8",
+            "properties": {
+                "oldValue": "openshift.ProjectModule",
+                "newValue": "openshift6.ProjectModule"
+            }
+        },
+        {
+            "order": 9,
+            "action": "update",
+            "type": "ci",
+            "description": "migrate existing type to new type to avoid collision with v8",
+            "properties": {
+                "oldValue": "openshift.AppModule",
+                "newValue": "openshift6.AppModule"
+            }
+        },
+        {
+            "order": 10,
+            "action": "update",
+            "type": "ci",
+            "description": "migrate existing type to new type to avoid collision with v8",
+            "properties": {
+                "oldValue": "openshift.BinaryAppModule",
+                "newValue": "openshift6.BinaryAppModule"
+            }
+        },
+        {
+            "order": 11,
+            "action": "update",
+            "type": "ci",
+            "description": "migrate existing type to new type to avoid collision with v8",
+            "properties": {
+                "oldValue": "openshift.DockerfileAppModule",
+                "newValue": "openshift6.DockerfileAppModule"
+            }
+        },
+        {
+            "order": 12,
+            "action": "update",
+            "type": "ci",
+            "description": "migrate existing type to new type to avoid collision with v8",
+            "properties": {
+                "oldValue": "openshift.ResourceModule",
+                "newValue": "openshift6.ResourceModule"
+            }
+        }
+    ]
+}

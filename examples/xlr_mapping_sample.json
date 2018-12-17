@@ -1,0 +1,729 @@
+{
+    "systemType": "xlr",
+    "description": "migration script for xlr-xldeploy-plugin, migration from community to official xlr-xld-plugin",
+    "actions": [
+        {
+            "order": 1,
+            "action": "update",
+            "type": "ci",
+            "description": "migrate existing type server to new type server",
+            "properties": {
+                "oldValue": "xldeploy.Server",
+                "newValue": "xldeploy.XLDeployServer"
+            }
+        },
+        {
+            "order": 2,
+            "action": "update",
+            "type": "ci",
+            "description": "migrate existing type CliConfig to new type CliConfig - 22",
+            "properties": {
+                "oldValue": "xldeploy.CliConfig",
+                "newValue": "xld.CliConfig"
+            }
+        },
+        {
+            "order": 3,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type DeployTask to new task type - 6",
+            "message": "Please note: For task Xl Deploy:Deploy, you will need to update the property Deployed Properties manually.",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "xldeploy.DeployTask",
+                "newValue": "xldeploy.Deploy"
+            },
+            "contentActionsXLR": [
+                {
+                    "action": "updateName",
+                    "order": 1,
+                    "properties": {
+                        "name": "xldeployServer",
+                        "newName": "server",
+                        "valueDataType": "string_value"
+                    }
+                },
+                {
+                    "action": "create",
+                    "order": 2,
+                    "properties": {
+                        "name": "connectionFailureCount",
+                        "value": 0,
+                        "valueDataType": "integer_value"
+                    }
+                },
+                {
+                    "action": "create",
+                    "order": 3,
+                    "properties": {
+                        "name": "retryCounter",
+                        "value": "{ \"currentContinueRetrial\": \"0\", \"currentPollingTrial\": \"0\"}",
+                        "valueDataType": "json_value"
+                    }
+                },
+                {
+                    "action": "updateName",
+                    "order": 4,
+                    "properties": {
+                        "name": "environment",
+                        "newName": "deploymentEnvironment",
+                        "valueDataType": "string_value"
+                    }
+                },
+                {
+                    "action": "updateValue",
+                    "order": 5,
+                    "properties": {
+                        "name": "overrideDeployedProps",
+                        "newValue": "",
+                        "valueDataType": "json_value"
+                    }
+                },
+                {
+                    "action": "updateName",
+                    "order": 6,
+                    "properties": {
+                        "name": "rollbackOnError",
+                        "newName": "rollbackOnFailure",
+                        "valueDataType": "boolean_value"
+                    }
+                },
+                {
+                    "action": "delete",
+                    "order": 7,
+                    "properties": {
+                        "name": "deployedProperties"
+                    }
+                }
+            ]
+
+        },
+        {
+            "order": 4,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type UndeployTask to new task type - 7",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "xldeploy.UndeployTask",
+                "newValue": "xldeploy.Undeploy"
+            },
+            "contentActionsXLR": [
+                {
+                    "action": "delete",
+                    "order": 1,
+                    "properties": {
+                        "name": "environment"
+                    }
+                },
+                {
+                    "action": "create",
+                    "order": 2,
+                    "properties": {
+                        "name": "retryCounter",
+                        "value": "{ \"currentContinueRetrial\": \"0\", \"currentPollingTrial\": \"0\"}",
+                        "valueDataType": "json_value"
+                    }
+                },
+                {
+                    "action": "create",
+                    "order": 3,
+                    "properties": {
+                        "name": "connectionFailureCount",
+                        "value": 0,
+                        "valueDataType": "integer_value"
+                    }
+                },
+                {
+                    "action": "updateName",
+                    "order": 4,
+                    "properties": {
+                        "name": "xldeployServer",
+                        "newName": "server",
+                        "valueDataType": "string_value"
+                    }
+                },
+                {
+                    "action": "updateName",
+                    "order": 5,
+                    "properties": {
+                        "name": "rollbackOnError",
+                        "newName": "rollbackOnFailure",
+                        "valueDataType": "boolean_value"
+                    }
+                }
+            ]
+
+        },
+        {
+            "order": 5,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type ControlTask to new task type - 8",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "xldeploy.ControlTask",
+                "newValue": "xldeploy.Controltask"
+            },
+            "contentActionsXLR": [
+                {
+                    "action": "updateName",
+                    "order": 1,
+                    "properties": {
+                        "name": "xldeployServer",
+                        "newName": "server",
+                        "valueDataType": "string_value"
+                    }
+                },
+                {
+                    "action": "create",
+                    "order": 2,
+                    "properties": {
+                        "name": "connectionFailureCount",
+                        "value": 0,
+                        "valueDataType": "integer_value"
+                    }
+                },
+                {
+                    "action": "create",
+                    "order": 4,
+                    "properties": {
+                        "name": "retryCounter",
+                        "value": "{ \"currentContinueRetrial\": \"0\", \"currentPollingTrial\": \"0\"}",
+                        "valueDataType": "json_value"
+                    }
+                },
+                {
+                    "action": "updateName",
+                    "order": 7,
+                    "properties": {
+                        "name": "controlTaskName",
+                        "newName": "taskName",
+                        "valueDataType": "string_value"
+                    }
+                },
+                {
+                    "action": "updateValue",
+                    "order": 6,
+                    "properties": {
+                        "name": "parameters",
+                        "newValue": "",
+                        "valueDataType": "json_value"
+                    }
+                }
+            ]
+        },
+        {
+            "order": 6,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type Migrate Package Task to new task type - 9",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "xldeploy.MigrateTask",
+                "newValue": "xld.Migrate"
+            },
+            "contentActionsXLR": [
+                {
+                    "action": "updateName",
+                    "order": 1,
+                    "properties": {
+                        "name": "xldeployServer",
+                        "newName": "server",
+                        "valueDataType": "string_value"
+                    }
+                },
+                {
+                    "action": "create",
+                    "order": 2,
+                    "properties": {
+                        "name": "connectionFailureCount",
+                        "value": 0,
+                        "valueDataType": "integer_value"
+                    }
+                }
+            ]
+        },
+        {
+            "order": 7,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type Import Package Task to new task type - 11",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "xldeploy.ImportTask",
+                "newValue": "xld.ImportTask"
+            },
+            "contentActionsXLR": [
+                {
+                    "action": "updateName",
+                    "order": 1,
+                    "properties": {
+                        "name": "xldeployServer",
+                        "newName": "server",
+                        "valueDataType": "string_value"
+                    }
+                },
+                {
+                    "action": "create",
+                    "order": 2,
+                    "properties": {
+                        "name": "connectionFailureCount",
+                        "value": 0,
+                        "valueDataType": "integer_value"
+                    }
+                }
+            ]
+        },
+        {
+            "order": 8,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type Get Latest Version Task to new task type - 12",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "xldeploy.GetLatestVersionTask",
+                "newValue": "xld.GetLatestVersion"
+            },
+            "contentActionsXLR": [
+                {
+                    "action": "updateName",
+                    "order": 1,
+                    "properties": {
+                        "name": "xldeployServer",
+                        "newName": "server",
+                        "valueDataType": "string_value"
+                    }
+                },
+                {
+                    "action": "create",
+                    "order": 2,
+                    "properties": {
+                        "name": "connectionFailureCount",
+                        "value": 0,
+                        "valueDataType": "integer_value"
+                    }
+                }
+            ]
+        },
+        {
+            "order": 9,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type Get All Versions Task to new task type - 13",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "xldeploy.GetAllVersionsTask",
+                "newValue": "xld.GetAllVersions"
+            },
+            "contentActionsXLR": [
+                {
+                    "action": "updateName",
+                    "order": 1,
+                    "properties": {
+                        "name": "xldeployServer",
+                        "newName": "server",
+                        "valueDataType": "string_value"
+                    }
+                },
+                {
+                    "action": "create",
+                    "order": 2,
+                    "properties": {
+                        "name": "connectionFailureCount",
+                        "value": 0,
+                        "valueDataType": "integer_value"
+                    }
+                },
+                {
+                    "action": "delete",
+                    "order": 3,
+                    "properties": {
+                        "name": "stripApplications"
+                    }
+                }
+            ]
+        },
+        {
+            "order": 10,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type Get CI Task to new task type - 14",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "xldeploy.GetCITask",
+                "newValue": "xld.GetCITask"
+            },
+            "contentActionsXLR": [
+                {
+                    "action": "updateName",
+                    "order": 1,
+                    "properties": {
+                        "name": "xldeployServer",
+                        "newName": "server",
+                        "valueDataType": "string_value"
+                    }
+                },
+                {
+                    "action": "create",
+                    "order": 2,
+                    "properties": {
+                        "name": "connectionFailureCount",
+                        "value": 0,
+                        "valueDataType": "integer_value"
+                    }
+                }
+            ]
+        },
+        {
+            "order": 11,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type Get Latest Version Deployed Task to new task type - 15",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "xldeploy.GetLastVersionDeployedTask",
+                "newValue": "xld.GetLastVersionDeployed"
+            },
+            "contentActionsXLR": [
+                {
+                    "action": "updateName",
+                    "order": 1,
+                    "properties": {
+                        "name": "xldeployServer",
+                        "newName": "server",
+                        "valueDataType": "string_value"
+                    }
+                },
+                {
+                    "action": "create",
+                    "order": 2,
+                    "properties": {
+                        "name": "connectionFailureCount",
+                        "value": 0,
+                        "valueDataType": "integer_value"
+                    }
+                }
+            ]
+        },
+        {
+            "order": 12,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type Does CI Exist to new task type - 16",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "xldeploy.DoesCIExist",
+                "newValue": "xld.DoesCIExist"
+            },
+            "contentActionsXLR": [
+                {
+                    "action": "updateName",
+                    "order": 1,
+                    "properties": {
+                        "name": "xldeployServer",
+                        "newName": "server",
+                        "valueDataType": "string_value"
+                    }
+                },
+                {
+                    "action": "create",
+                    "order": 2,
+                    "properties": {
+                        "name": "connectionFailureCount",
+                        "value": 0,
+                        "valueDataType": "integer_value"
+                    }
+                }
+            ]
+        },
+        {
+            "order": 13,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type Create Folder Tree to new task type - 17",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "xldeploy.CreateFolderTree",
+                "newValue": "xld.CreateFolderTree"
+            },
+            "contentActionsXLR": [
+                {
+                    "action": "updateName",
+                    "order": 1,
+                    "properties": {
+                        "name": "xldeployServer",
+                        "newName": "server",
+                        "valueDataType": "string_value"
+                    }
+                },
+                {
+                    "action": "delete",
+                    "order": 2,
+                    "properties": {
+                        "name": "folderID"
+                    }
+                },
+                {
+                    "action": "create",
+                    "order": 3,
+                    "properties": {
+                        "name": "connectionFailureCount",
+                        "value": 0,
+                        "valueDataType": "integer_value"
+                    }
+                }
+            ]
+        },
+        {
+            "order": 14,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type Create CI to new task type - 18",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "xldeploy.CreateCI",
+                "newValue": "xld.CreateCI"
+            },
+            "contentActionsXLR": [
+                {
+                    "action": "updateName",
+                    "order": 1,
+                    "properties": {
+                        "name": "xldeployServer",
+                        "newName": "server",
+                        "valueDataType": "string_value"
+                    }
+                },
+                {
+                    "action": "create",
+                    "order": 2,
+                    "properties": {
+                        "name": "connectionFailureCount",
+                        "value": 0,
+                        "valueDataType": "integer_value"
+                    }
+                }
+            ]
+        },
+        {
+            "order": 15,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type Delete CI to new task type - 19",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "xldeploy.DeleteCI",
+                "newValue": "xld.DeleteCI"
+            },
+            "contentActionsXLR": [
+                {
+                    "action": "updateName",
+                    "order": 1,
+                    "properties": {
+                        "name": "xldeployServer",
+                        "newName": "server",
+                        "valueDataType": "string_value"
+                    }
+                },
+                {
+                    "action": "create",
+                    "order": 2,
+                    "properties": {
+                        "name": "connectionFailureCount",
+                        "value": 0,
+                        "valueDataType": "integer_value"
+                    }
+                }
+            ]
+        },
+        {
+            "order": 16,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type Delete Infrastructure to new task type - 20",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "xldeploy.DeleteInfrastructure",
+                "newValue": "xld.DeleteInfrastructure"
+            },
+            "contentActionsXLR": [
+                {
+                    "action": "updateName",
+                    "order": 1,
+                    "properties": {
+                        "name": "xldeployServer",
+                        "newName": "server",
+                        "valueDataType": "string_value"
+                    }
+                },
+                {
+                    "action": "create",
+                    "order": 2,
+                    "properties": {
+                        "name": "connectionFailureCount",
+                        "value": 0,
+                        "valueDataType": "integer_value"
+                    }
+                }
+            ]
+        },
+        {
+            "order": 17,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type UpdateCIProperty to new task type - 21",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "xldeploy.UpdateCIProperty",
+                "newValue": "xld.UpdateCIProperty"
+            },
+            "contentActionsXLR": [
+                {
+                    "action": "updateName",
+                    "order": 1,
+                    "properties": {
+                        "name": "xldeployServer",
+                        "newName": "server",
+                        "valueDataType": "string_value"
+                    }
+                },
+                {
+                    "action": "create",
+                    "order": 2,
+                    "properties": {
+                        "name": "connectionFailureCount",
+                        "value": 0,
+                        "valueDataType": "integer_value"
+                    }
+                }
+            ]
+        },
+        {
+            "order": 18,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing Cli Run Script task type to new task type -25",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "xldeploy.cli",
+                "newValue": "xld.cli"
+            }
+        },
+        {
+            "order": 19,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing Cli Run Script File task type to new task type - 26",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "xldeploy.cliFile",
+                "newValue": "xld.cliFile"
+            }
+        },
+        {
+            "order": 20,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing Cli Run Script URL task type to new task type - 27",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "xldeploy.cliUrl",
+                "newValue": "xld.cliUrl"
+            }
+        },
+        {
+            "order": 21,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type Get CI Tags to new task type - 28",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "xldeploy.GetCITags",
+                "newValue": "xld.GetCITags"
+            },
+            "contentActionsXLR": [
+                {
+                    "action": "updateName",
+                    "order": 1,
+                    "properties": {
+                        "name": "xldeployServer",
+                        "newName": "server",
+                        "valueDataType": "string_value"
+                    }
+                },
+                {
+                    "action": "create",
+                    "order": 2,
+                    "properties": {
+                        "name": "connectionFailureCount",
+                        "value": 0,
+                        "valueDataType": "integer_value"
+                    }
+                }
+            ]
+        },
+        {
+            "order": 22,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type Add CI Tag to new task type - 29",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "xldeploy.AddCITag",
+                "newValue": "xld.AddCITag"
+            },
+            "contentActionsXLR": [
+                {
+                    "action": "updateName",
+                    "order": 1,
+                    "properties": {
+                        "name": "xldeployServer",
+                        "newName": "server",
+                        "valueDataType": "string_value"
+                    }
+                },
+                {
+                    "action": "create",
+                    "order": 2,
+                    "properties": {
+                        "name": "connectionFailureCount",
+                        "value": 0,
+                        "valueDataType": "integer_value"
+                    }
+                }
+            ]
+        },
+        {
+            "order": 23,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type Set CI Tag to new task type - 30",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "xldeploy.SetCITags",
+                "newValue": "xld.SetCITags"
+            },
+            "contentActionsXLR": [
+                {
+                    "action": "updateName",
+                    "order": 1,
+                    "properties": {
+                        "name": "xldeployServer",
+                        "newName": "server",
+                        "valueDataType": "string_value"
+                    }
+                },
+                {
+                    "action": "create",
+                    "order": 2,
+                    "properties": {
+                        "name": "connectionFailureCount",
+                        "value": 0,
+                        "valueDataType": "integer_value"
+                    }
+                }
+            ]
+        }
+    ]
+}
