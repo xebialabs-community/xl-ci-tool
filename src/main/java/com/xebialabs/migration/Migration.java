@@ -170,7 +170,10 @@ public class Migration {
                     // Create database connection
                     // Register JDBC driver 
                     Class.forName(processor.dbDriver);
-                    Class.forName(processor.reportDbDriver); 
+                    if(SystemType.XLR == processor.systemType)
+                    {
+                        Class.forName(processor.reportDbDriver); 
+                    }
             
                     // Open a connection 
                     System.out.println("Connecting to database..."); 

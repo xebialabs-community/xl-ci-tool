@@ -458,6 +458,13 @@ public abstract class MigrationRunner
     {
         String sqlkey =  makeSqlKey(action, preview, qualifier);
         Map<String, String> sqlMap = SQL_STMTS.get(this.dbType.name());
+
+        /*System.out.println("sqlkey = "+sqlkey);
+        for (Map.Entry<String, String> entry : sqlMap.entrySet())
+        {
+            System.out.println(entry.getKey() + "/" + entry.getValue());
+        }*/
+        
         String sql =  sqlMap.get(sqlkey);
         if ( sql == null )
         {

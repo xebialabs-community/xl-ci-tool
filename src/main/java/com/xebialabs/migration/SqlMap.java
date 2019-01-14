@@ -18,6 +18,9 @@ public class SqlMap
      * for preview mode.  These should return a count like the actual sql statement but they must not alter
      * any database tables.
      * 
+     * NOTE: Most statements have not be throughly tested and are only suggestions.
+     * The following have been partially tested: derby in XLD and XLR, h2 in XLD, mySQL in XLD, postgres in XLD
+     * 
      */
     private static Map<String, Map<String, String>> ALL_SQL_STMTS;
     static {
@@ -42,6 +45,10 @@ public class SqlMap
             SystemType.XLD.name()+"."+ActionType.COPY.name()+"."+ItemType.CI.name()+".createtrigger", 
             "drop trigger if exists cis_insert_trigger; create trigger cis_insert_trigger before insert on XLD_CIS for each row begin set new.id = ifnull((select max(id) from XLD_CIS), -1) + 1; end;"
         );
+        postgresqlMap.put(
+            SystemType.XLD.name()+"."+ActionType.COPY.name()+"."+ItemType.CI.name()+".createtrigger", 
+            "drop trigger if exists cis_insert_trigger; create trigger cis_insert_trigger before insert on \"XLD_CIS\" for each row begin set new.id = ifnull((select max(id) from \"XLD_CIS\"), -1) + 1; end;"
+        );
         /////////////////////////////////////////
 
         /// XLD.ACTION.COPY.CI //////////////////////////////////////
@@ -53,6 +60,10 @@ public class SqlMap
             SystemType.XLD.name()+"."+ActionType.COPY.name()+"."+ItemType.CI.name(), 
             "insert into XLD_CIS (ci_type, name, parent_id, token, created_at, created_by, modified_at, modified_by, path, secured_ci) select :newValue, CONCAT(name, :newNameSuffix), parent_id, token, created_at, created_by, modified_at, modified_by, CONCAT(path, :newNameSuffix), secured_ci from XLD_CIS where ci_type = :oldValue"
         );
+        postgresqlMap.put(
+            SystemType.XLD.name()+"."+ActionType.COPY.name()+"."+ItemType.CI.name(), 
+            "insert into \"XLD_CIS\" (ci_type, name, parent_id, token, created_at, created_by, modified_at, modified_by, path, secured_ci) select :newValue, CONCAT(name, :newNameSuffix), parent_id, token, created_at, created_by, modified_at, modified_by, CONCAT(path, :newNameSuffix), secured_ci from \"XLD_CIS\" where ci_type = :oldValue"
+        );
         /////////////////////////////////////////
 
         /// XLD.COPY.CI.droptrigger //////////////////////////////////////
@@ -61,6 +72,10 @@ public class SqlMap
             "drop trigger cis_insert_trigger"
         );
         mySqlMap.put(
+            SystemType.XLD.name()+"."+ActionType.COPY.name()+"."+ItemType.CI.name()+".droptrigger", 
+            "drop trigger if exists cis_insert_trigger"
+        );
+        postgresqlMap.put(
             SystemType.XLD.name()+"."+ActionType.COPY.name()+"."+ItemType.CI.name()+".droptrigger", 
             "drop trigger if exists cis_insert_trigger"
         );
@@ -75,6 +90,10 @@ public class SqlMap
             SystemType.XLD.name()+"."+ActionType.COPY.name()+"."+ItemType.CI.name()+".preview", 
             "select count(ci_type) from XLD_CIS where ci_type = :oldValue"
         );
+        postgresqlMap.put(
+            SystemType.XLD.name()+"."+ActionType.COPY.name()+"."+ItemType.CI.name()+".preview", 
+            "select count(ci_type) from \"XLD_CIS\" where ci_type = :oldValue"
+        );
         /////////////////////////////////////////
 
         /// XLD.UPDATE.CI //////////////////////////////////////
@@ -85,6 +104,10 @@ public class SqlMap
         mySqlMap.put(
             SystemType.XLD.name()+"."+ActionType.UPDATE.name()+"."+ItemType.CI.name(), 
             "update XLD_CIS set ci_type = :newValue where ci_type = :oldValue"
+        );
+        postgresqlMap.put(
+            SystemType.XLD.name()+"."+ActionType.UPDATE.name()+"."+ItemType.CI.name(), 
+            "update \"XLD_CIS\" set ci_type = :newValue where ci_type = :oldValue"
         );
         /////////////////////////////////////////
 
@@ -98,6 +121,10 @@ public class SqlMap
             SystemType.XLD.name()+"."+ActionType.UPDATE.name()+"."+ItemType.CI.name()+".preview", 
             "select count(ci_type) from XLD_CIS where ci_type = :oldValue"
         );
+        postgresqlMap.put(
+            SystemType.XLD.name()+"."+ActionType.UPDATE.name()+"."+ItemType.CI.name()+".preview", 
+            "select count(ci_type) from \"XLD_CIS\" where ci_type = :oldValue"
+        );
         /////////////////////////////////////////
 
         /// XLD.DELETE.CI.children //////////////////////////////////////
@@ -108,6 +135,10 @@ public class SqlMap
         mySqlMap.put(
             SystemType.XLD.name()+"."+ActionType.DELETE.name()+"."+ItemType.CI.name()+".children", 
             "delete from XLD_CI_PROPERTIES where ci_id in (select id from XLD_CIS where ci_type = :ciName)"
+        );
+        postgresqlMap.put(
+            SystemType.XLD.name()+"."+ActionType.DELETE.name()+"."+ItemType.CI.name()+".children", 
+            "delete from \"XLD_CI_PROPERTIES\" where ci_id in (select \"ID\" from \"XLD_CIS\" where ci_type = :ciName)"
         );
         /////////////////////////////////////////
 
@@ -120,6 +151,10 @@ public class SqlMap
             SystemType.XLD.name()+"."+ActionType.DELETE.name()+"."+ItemType.CI.name(), 
             "delete from XLD_CIS where ci_type = :ciName"
         );
+        postgresqlMap.put(
+            SystemType.XLD.name()+"."+ActionType.DELETE.name()+"."+ItemType.CI.name(), 
+            "delete from \"XLD_CIS\" where ci_type = :ciName"
+        );
         /////////////////////////////////////////
 
         /// XLD.DELETE.CI.preview //////////////////////////////////////
@@ -130,6 +165,10 @@ public class SqlMap
         mySqlMap.put(
             SystemType.XLD.name()+"."+ActionType.DELETE.name()+"."+ItemType.CI.name()+".preview", 
             "select count(ci_type) from XLD_CIS where ci_type = :ciName"
+        );
+        postgresqlMap.put(
+            SystemType.XLD.name()+"."+ActionType.DELETE.name()+"."+ItemType.CI.name()+".preview", 
+            "select count(ci_type) from \"XLD_CIS\" where ci_type = :ciName"
         );
         /////////////////////////////////////////
 
@@ -142,6 +181,10 @@ public class SqlMap
         mySqlMap.put(
             SystemType.XLD.name()+"."+ActionType.CREATE.name()+"."+ItemType.CI_PROPERTY.name()+".createtrigger", 
             "drop trigger if exists ci_properties_insert_trigger; create trigger ci_properties_insert_trigger before insert on XLD_CI_PROPERTIES for each row begin set new.id = ifnull((select max(id) from XLD_CI_PROPERTIES), -1) + 1; end;"
+        );
+        postgresqlMap.put(
+            SystemType.XLD.name()+"."+ActionType.CREATE.name()+"."+ItemType.CI_PROPERTY.name()+".createtrigger", 
+            "drop trigger if exists ci_properties_insert_trigger; create trigger ci_properties_insert_trigger before insert on \"XLD_CI_PROPERTIES\" for each row begin set new.id = ifnull((select max(id) from XLD_CI_PROPERTIES), -1) + 1; end;"
         );
         /////////////////////////////////////////
 
@@ -179,6 +222,23 @@ public class SqlMap
             SystemType.XLD.name()+"."+ActionType.CREATE.name()+"."+ItemType.CI_PROPERTY.name()+"."+PropertyValueType.DATE_VALUE.name(), 
             "insert into XLD_CI_PROPERTIES (ci_id, name, date_value) select id, :propertyName, :date_value from XLD_CIS where ci_type = :ciName"
         );
+
+        postgresqlMap.put(
+            SystemType.XLD.name()+"."+ActionType.CREATE.name()+"."+ItemType.CI_PROPERTY.name()+"."+PropertyValueType.STRING_VALUE.name(), 
+            "insert into \"XLD_CI_PROPERTIES\" (ci_id, name, string_value) select id, :propertyName, :string_value from \"XLD_CIS\" where ci_type = :ciName"
+        );
+        postgresqlMap.put(
+            SystemType.XLD.name()+"."+ActionType.CREATE.name()+"."+ItemType.CI_PROPERTY.name()+"."+PropertyValueType.BOOLEAN_VALUE.name(), 
+            "insert into \"XLD_CI_PROPERTIES\" (ci_id, name, boolean_value) select \"ID\", :propertyName, :boolean_value from \"XLD_CIS\" where ci_type = :ciName"
+        );
+        postgresqlMap.put(
+            SystemType.XLD.name()+"."+ActionType.CREATE.name()+"."+ItemType.CI_PROPERTY.name()+"."+PropertyValueType.INTEGER_VALUE.name(), 
+            "insert into \"XLD_CI_PROPERTIES\" (ci_id, name, integer_value) select \"ID\", :propertyName, :integer_value from \"XLD_CIS\" where ci_type = :ciName"
+        );
+        postgresqlMap.put(
+            SystemType.XLD.name()+"."+ActionType.CREATE.name()+"."+ItemType.CI_PROPERTY.name()+"."+PropertyValueType.DATE_VALUE.name(), 
+            "insert into \"XLD_CI_PROPERTIES\" (ci_id, name, date_value) select \"ID\", :propertyName, :date_value from \"XLD_CIS\" where ci_type = :ciName"
+        );
         /////////////////////////////////////////
 
         /// XLD.CREATE.CI_PROPERTY.STRING or BOOLEAN or INTEGER or DATE.preview ////////////////////////////////////// 
@@ -215,6 +275,23 @@ public class SqlMap
             SystemType.XLD.name()+"."+ActionType.CREATE.name()+"."+ItemType.CI_PROPERTY.name()+"."+PropertyValueType.DATE_VALUE.name()+".preview", 
             "select count(ci_type) from XLD_CIS where ci_type = :ciName"
         );
+
+        postgresqlMap.put(
+            SystemType.XLD.name()+"."+ActionType.CREATE.name()+"."+ItemType.CI_PROPERTY.name()+"."+PropertyValueType.STRING_VALUE.name()+".preview", 
+            "select count(ci_type) from \"XLD_CIS\" where ci_type = :ciName"
+        );
+        postgresqlMap.put(
+            SystemType.XLD.name()+"."+ActionType.CREATE.name()+"."+ItemType.CI_PROPERTY.name()+"."+PropertyValueType.BOOLEAN_VALUE.name()+".preview", 
+            "select count(ci_type) from \"XLD_CIS\" where ci_type = :ciName"
+        );
+        postgresqlMap.put(
+            SystemType.XLD.name()+"."+ActionType.CREATE.name()+"."+ItemType.CI_PROPERTY.name()+"."+PropertyValueType.INTEGER_VALUE.name()+".preview", 
+            "select count(ci_type) from \"XLD_CIS\" where ci_type = :ciName"
+        );
+        postgresqlMap.put(
+            SystemType.XLD.name()+"."+ActionType.CREATE.name()+"."+ItemType.CI_PROPERTY.name()+"."+PropertyValueType.DATE_VALUE.name()+".preview", 
+            "select count(ci_type) from \"XLD_CIS\" where ci_type = :ciName"
+        );
         /////////////////////////////////////////
 
         /// XLD.CREATE.CI_PROPERTY.droptrigger //////////////////////////////////////
@@ -223,6 +300,10 @@ public class SqlMap
             "drop trigger ci_properties_insert_trigger"
         );
         mySqlMap.put(
+            SystemType.XLD.name()+"."+ActionType.CREATE.name()+"."+ItemType.CI_PROPERTY.name()+".droptrigger", 
+            "drop trigger if exists ci_properties_insert_trigger"
+        );
+        postgresqlMap.put(
             SystemType.XLD.name()+"."+ActionType.CREATE.name()+"."+ItemType.CI_PROPERTY.name()+".droptrigger", 
             "drop trigger if exists ci_properties_insert_trigger"
         );
@@ -237,6 +318,10 @@ public class SqlMap
             SystemType.XLD.name()+"."+ActionType.CREATE.name()+"."+ItemType.CI_PROPERTY.name()+".preview", 
             "select count(ci_type) from XLD_CIS where ci_type = :ciName"
         );
+        postgresqlMap.put(
+            SystemType.XLD.name()+"."+ActionType.CREATE.name()+"."+ItemType.CI_PROPERTY.name()+".preview", 
+            "select count(ci_type) from \"XLD_CIS\" where ci_type = :ciName"
+        );
         /////////////////////////////////////////
 
         /// XLD.UPDATE.CI_PROPERTY //////////////////////////////////////
@@ -247,6 +332,10 @@ public class SqlMap
         mySqlMap.put(
             SystemType.XLD.name()+"."+ActionType.UPDATE.name()+"."+ItemType.CI_PROPERTY.name(), 
             "update XLD_CI_PROPERTIES set name = :newValue where name = :oldValue and ci_id in (select id from XLD_CIS where ci_type = :ciName)"
+        );
+        postgresqlMap.put(
+            SystemType.XLD.name()+"."+ActionType.UPDATE.name()+"."+ItemType.CI_PROPERTY.name(), 
+            "update \"XLD_CI_PROPERTIES\" set name = :newValue where name = :oldValue and ci_id in (select \"ID\" from \"XLD_CIS\" where ci_type = :ciName)"
         );
         /////////////////////////////////////////
 
@@ -259,6 +348,10 @@ public class SqlMap
             SystemType.XLD.name()+"."+ActionType.UPDATE.name()+"."+ItemType.CI_PROPERTY.name()+".preview", 
             "select count(name) from XLD_CI_PROPERTIES where name = :oldValue and ci_id in (select id from XLD_CIS where ci_type = :ciName)"
         );
+        postgresqlMap.put(
+            SystemType.XLD.name()+"."+ActionType.UPDATE.name()+"."+ItemType.CI_PROPERTY.name()+".preview", 
+            "select count(name) from \"XLD_CI_PROPERTIES\" where name = :oldValue and ci_id in (select \"ID\" from \"XLD_CIS\" where ci_type = :ciName)"
+        );
         ////////////////////////////////////////
 
         /// XLD.DELETE.CI_PROPERTY /////////////////////////////////////
@@ -270,6 +363,10 @@ public class SqlMap
             SystemType.XLD.name()+"."+ActionType.DELETE.name()+"."+ItemType.CI_PROPERTY.name(), 
             "delete from XLD_CI_PROPERTIES where name = :propertyName and ci_id in (select id from XLD_CIS where ci_type = :ciName)"
         );
+        postgresqlMap.put(
+            SystemType.XLD.name()+"."+ActionType.DELETE.name()+"."+ItemType.CI_PROPERTY.name(), 
+            "delete from \"XLD_CI_PROPERTIES\" where name = :propertyName and ci_id in (select \"ID\" from \"XLD_CIS\" where ci_type = :ciName)"
+        );
         ////////////////////////////////////////
 
         /// XLD.DELETE.CI_PROPERTY.preview /////////////////////////////////////
@@ -280,6 +377,10 @@ public class SqlMap
         mySqlMap.put(
             SystemType.XLD.name()+"."+ActionType.DELETE.name()+"."+ItemType.CI_PROPERTY.name()+".preview", 
             "select count(name) from XLD_CI_PROPERTIES where name = :propertyName and ci_id in (select id from XLD_CIS where ci_type = :ciName)"
+        );
+        postgresqlMap.put(
+            SystemType.XLD.name()+"."+ActionType.DELETE.name()+"."+ItemType.CI_PROPERTY.name()+".preview", 
+            "select count(name) from \"XLD_CI_PROPERTIES\" where name = :propertyName and ci_id in (select \"ID\" from \"XLD_CIS\" where ci_type = :ciName)"
         );
         ////////////////////////////////////////
 
@@ -457,10 +558,10 @@ public class SqlMap
         masterMap.put(DbType.DERBY.name(), derbyMap);
         masterMap.put(DbType.MYSQL.name(), mySqlMap);
         masterMap.put(DbType.H2.name(), h2Map);
-        masterMap.put(DbType.POSTGRESQL.name(), h2Map);
-        masterMap.put(DbType.ORACLE.name(), h2Map);
-        masterMap.put(DbType.DB2.name(), h2Map);
-        masterMap.put(DbType.SQLSERVER.name(), h2Map);
+        masterMap.put(DbType.POSTGRESQL.name(), postgresqlMap);
+        masterMap.put(DbType.ORACLE.name(), oracleMap);
+        masterMap.put(DbType.DB2.name(), db2Map);
+        masterMap.put(DbType.SQLSERVER.name(), sqlserverMap);
 
 
         ALL_SQL_STMTS = Collections.unmodifiableMap(masterMap);

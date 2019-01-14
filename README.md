@@ -9,7 +9,7 @@ XL Release and XL Deploy define configuration items.  These items represent obje
 ## Requirements ##
 
 * **XL Release 7.5+** or **XL Deploy 7.5+**
-* Note: only tested with internal (Derby) and MySql repositories
+* Note: only tested with internal (Derby), MySql and Postgres repositories
 
 ---
 
@@ -52,13 +52,13 @@ java -jar xl_ci_tool_exec-1.0.jar -f "/Users/tester/XLR-ALL.json" -i "/xl-releas
 1. Create a mapping file that accomplishes the CI Type name changes you need for the target plugin.
 2. Shut down the target system (either XL Release or XL Deploy).
 3. Run the migration tool in test mode:
-    java -jar xl_ci_tool_exec.jar -f </path/mapping_file.json> -i </path/target_home> -preview
+    java -jar xl_ci_tool_exec-<version>.jar -f </path/mapping_file.json> -i </path/target_home> -preview
 
 Verify the results are as you expect.  Adjust the mappign file as needed.  When you are ready to make the migration do the following:
 
 1. Make a backup of the repository database.
 2. Run the migration tool:
-    java -jar xl_ci_tool_exec.jar -f </path/mapping_file.json> -i </path/target_home>
+    java -jar xl_ci_tool_exec-<version>.jar -f </path/mapping_file.json> -i </path/target_home>
 3. Delete the old plugin
 4. Copy in the new plugin
 5. Start the target system
