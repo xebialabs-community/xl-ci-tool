@@ -4,6 +4,8 @@
 
 XL Release and XL Deploy define configuration items.  These items represent object types implemented by the plugin.  As these object types are used, the type name is stored in the repository along with the data appropriate to the type.  This couples repository items to plugins.  If you remove the a plugin or replace it with a similar plugin that has different type names, the applications will complain.  While every attempt is made to not change configuration item type names, sometimes it cannot be helped.  Configuration items may be deprecated or renamed to avoid namespace collisions with new features, etc.  This is where the CI Migration Tool is useful.  It scans the XL Release or XL Deploy repository for CI names and takes some action according to a configuration file.
 
+NOTE: Because the tool relies on user created configuration files, it is essential to thoroughly test migration on a test system before migrating production systems. Always backup the databases.
+
 ---
 
 ## Requirements ##
@@ -15,13 +17,16 @@ XL Release and XL Deploy define configuration items.  These items represent obje
 
 ## Usage Scenarios ##
 
-_CI Type Names changes (additions, updates, removal) between plugin versions_
+The CI Migration Tool was developed to handle two types of usage scenarios.
+
+_1. CI Type Names changes (additions, updates, removal) between plugin versions_
+In this case, a new version of a plugin will replace an old version of a plugin. The migration tool updates existing entries in the application database and the report database to work with the new plugin.
 
 See: examples/xld_mapping_sample.json, examples/xlr_mapping_sample.json
 
-_Customized plugin to coexist with new plugin_
+_2. Customized plugin to coexist with new plugin_
 
-It is not uncommon for customers to modify plugins to perform some specialized action.  Over time these specialized actions may no longer be necessary but the plugin cannot be simply removed or upgraded to a later version due to legacy applications or environments.  In this scenario the migration tool can be used to move the ci type names to a new namespace (along with corresponding changes to the synthetic.xml of the plugin) so the new plugin can be used in parallel.
+It is not uncommon for customers to modify plugins to perform some specialized action.  Over time these specialized actions may no longer be necessary but the plugin cannot be simply removed or upgraded to a later version due to legacy applications or environments.  In this scenario the migration tool can be used to move the ci type names of existing database entries to a new namespace (along with corresponding changes to the synthetic.xml of the plugin) so the new plugin can be used in parallel.
 
 See: examples/xld_namespace_sample.json
 
@@ -32,7 +37,7 @@ See: examples/xld_namespace_sample.json
 The CI Migration Tool is a standalone java application that performs actions directly upon the repository database and is driven by an external JSON mapping file.  You invoke the tool from the command-line as follows:
 
 ```
-java -jar xl_ci_tool_exec-1.0.jar -f "/Users/tester/XLR-ALL.json" -i "/xl-release-8.1.0-server/"
+java -jar xl_ci_tool_exec-1.1.jar -f "/Users/tester/XLR-ALL.json" -i "/xl-release-8.1.0-server/"
 ```
 
 ### Command-line Arguments ###
@@ -45,7 +50,9 @@ java -jar xl_ci_tool_exec-1.0.jar -f "/Users/tester/XLR-ALL.json" -i "/xl-releas
 | -reportpw | <none>        | no  | if this flag is set, user will be prompted for the report/archive database password
 | -preview  | <none>        | no  | if this flag is set, the application will only preview the mapping actions. The database will not be changed.
 
-\* Please note: migration tool will load database driver jars dynamically. The tool uses the installation directory to find the lib directory within the XL installation and loads all jars from there. The tool also uses the installation directory to find embedded databases in the case where external database have not been configured.
+\* NOTE: The migration tool will load database driver jars dynamically. The tool uses the installation directory to find the lib directory within the XL installation and loads all jars from there. The tool also uses the installation directory to find embedded databases in the case where external database have not been configured. If external databases have been configured, the tool will inspect the XLR or XLD configuration file (xl-deploy.conf or xl-release.conf) to find the external databases.
+
+\* NOTE: If databases have been configured with passwords, the user of the migration tool can be prompted to supply database passwords with the -pw (main repository) and -reportpw (archive repository) flags. The command line entry of database passwords is masked. The tool does not use the password information stored in the xl-deploy.conf or xl-release.conf files.
 
 ### Steps ###
 
@@ -64,7 +71,7 @@ Verify the results are as you expect.  Adjust the mappign file as needed.  When 
 5. Start the target system
 6. Navigate to items that represent the mapped types to verify no errors.
 
-NOTE: If databases have been configured with passwords, the user of the migration tool can be prompted to supply database passwords with the -pw (main repository) and -reportpw (archive repository) flags. The command line entry of database passwords is masked. The tool does not use password information stored in the xl-deploy.conf or xl-release.conf files.
+
 
 ---
 
