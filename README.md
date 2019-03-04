@@ -3,7 +3,7 @@
 ## CI status ##
 
 [![Build Status][xl-ci-tool-travis-image] ][xl-ci-tool-travis-url]
-
+[![Codacy Badge][xl-ci-tool-codacy-image] ][xl-ci-tool-codacy-url]
 [![Code Climate][xl-ci-tool-code-climate-image] ][xl-ci-tool-code-climate-url]
 [![License: MIT][xl-ci-tool-license-image] ][xl-ci-tool-license-url]
 [![Github All Releases][xl-ci-tool-downloads-image] ]()
