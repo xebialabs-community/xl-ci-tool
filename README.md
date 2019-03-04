@@ -4,8 +4,8 @@
 
 [![Build Status][xlr-conjur-travis-image] ][xlr-conjur-travis-url]
 
-[xlr-conjur-travis-image]: https://travis-ci.com/xebialabs-community/xl-ci-tool.svg?branch=master
-[xlr-conjur-travis-url]: https://travis-ci.com/xebialabs-community/xl-ci-tool
+[xlr-conjur-travis-image]: https://travis-ci.org/xebialabs-community/xl-ci-tool.svg?branch=master
+[xlr-conjur-travis-url]: https://travis-ci.org/xebialabs-community/xl-ci-tool
 
 ## Overview ##
 
