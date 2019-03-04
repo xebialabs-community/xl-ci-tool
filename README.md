@@ -1,5 +1,12 @@
 # XL CI Migration Tool #
 
+## CI status ##
+
+[![Build Status][xlr-conjur-travis-image] ][xlr-conjur-travis-url]
+
+[xlr-conjur-travis-image]: https://travis-ci.com/xebialabs-community/xl-ci-tool.svg?branch=master
+[xlr-conjur-travis-url]: https://travis-ci.com/xebialabs-community/xl-ci-tool
+
 ## Overview ##
 
 XL Release and XL Deploy define configuration items.  These items represent object types implemented by the plugin.  As these object types are used, the type name is stored in the repository along with the data appropriate to the type.  This couples repository items to plugins.  If you remove the a plugin or replace it with a similar plugin that has different type names, the applications will complain.  While every attempt is made to not change configuration item type names, sometimes it cannot be helped.  Configuration items may be deprecated or renamed to avoid namespace collisions with new features, etc.  This is where the CI Migration Tool is useful.  It scans the XL Release or XL Deploy repository for CI names and takes some action according to a configuration file.
