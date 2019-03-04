@@ -18,12 +18,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-import com.typesafe.config.ConfigRenderOptions;
 import com.xebialabs.migration.SystemType;
 import com.xebialabs.migration.action.ActionType;
 import com.xebialabs.migration.action.ContentActionType;

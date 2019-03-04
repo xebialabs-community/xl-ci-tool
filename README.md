@@ -4,18 +4,11 @@
 
 [![Build Status][xl-ci-tool-travis-image] ][xl-ci-tool-travis-url]
 
+[![Code Climate][xl-ci-tool-code-climate-image] ][xl-ci-tool-code-climate-url]
 [![License: MIT][xl-ci-tool-license-image] ][xl-ci-tool-license-url]
 [![Github All Releases][xl-ci-tool-downloads-image] ]()
 
-[xl-ci-tool-travis-image]: https://travis-ci.org/xebialabs-community/xl-ci-tool.svg?branch=master
-[xl-ci-tool-travis-url]: https://travis-ci.org/xebialabs-community/xl-ci-tool
 
-
-
-[xl-ci-tool-license-image]: https://img.shields.io/badge/License-MIT-yellow.svg
-[xl-ci-tool-license-url]: https://opensource.org/licenses/MIT
-
-[xl-ci-tool-downloads-image]: https://img.shields.io/github/downloads/xebialabs-community/xl-ci-tool/total.svg
 
 ## Overview ##
 
@@ -189,3 +182,17 @@ To run tests:
 ```
 .\gradlew test
 ```
+
+[xl-ci-tool-travis-image]: https://travis-ci.org/xebialabs-community/xl-ci-tool.svg?branch=master
+[xl-ci-tool-travis-url]: https://travis-ci.org/xebialabs-community/xl-ci-tool
+
+[xl-ci-tool-codacy-image]: https://api.codacy.com/project/badge/Grade/d85d740ba9124d1e8fba24b2df376d13
+[xl-ci-tool-codacy-url]: https://www.codacy.com/app/ladamato/xl-ci-tool
+
+[xl-ci-tool-code-climate-image]: https://codeclimate.com/github/xebialabs-community/xl-ci-tool/badges/gpa.svg
+[xl-ci-tool-code-climate-url]: https://codeclimate.com/github/xebialabs-community/xl-ci-tool/maintainability
+
+[xl-ci-tool-license-image]: https://img.shields.io/badge/License-MIT-yellow.svg
+[xl-ci-tool-license-url]: https://opensource.org/licenses/MIT
+
+[xl-ci-tool-downloads-image]: https://img.shields.io/github/downloads/xebialabs-community/xl-ci-tool/total.svg

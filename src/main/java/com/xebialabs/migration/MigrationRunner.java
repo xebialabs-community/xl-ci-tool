@@ -412,8 +412,8 @@ public abstract class MigrationRunner
         }
         finally
         {
-            try { if (countSet != null) countSet.close(); } catch (Exception e) {};
-            try { if (pstmt != null) pstmt.close(); } catch (Exception e) {};
+            try { if (countSet != null) countSet.close(); } catch (Exception e) {}
+            try { if (pstmt != null) pstmt.close(); } catch (Exception e) {}
         }
     }
 
