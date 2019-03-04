@@ -1,5 +1,18 @@
+plugins {
+  id "com.github.hierynomus.license" version "0.14.0"
+  id "com.xebialabs.xldp" version "1.0.5"
+  id 'nebula.release' version '6.0.0'
+}
 
 apply plugin: 'java'
+
+if (!project.hasProperty('release.scope')) {
+  project.ext['release.scope'] = 'patch'
+}
+
+if (!project.hasProperty('release.useLastTag')) {
+  project.ext['release.useLastTag'] = true
+}
 
 version = '1.1'
 
@@ -12,6 +25,14 @@ task fatJar(type: Jar) {
     baseName = 'xl_ci_tool_exec'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
+}
+
+test {
+    // Auto detected Unit tests only, exclude the end to end integration test
+    exclude '**/*IntegrationTest.class'
+    
+    // show standard out and standard error of the test JVM(s) on the console
+    testLogging.showStandardStreams = true
 }
 
 dependencies {
@@ -44,6 +65,13 @@ repositories {
   maven {
     url 'http://www.knopflerfish.org/maven2'
   }
+}
+
+license {
+  header rootProject.file('License.md')
+  strictCheck false 
+  ext.year = Calendar.getInstance().get(Calendar.YEAR)
+  ext.name = 'XEBIALABS'
 }
 
 

@@ -1,3 +1,13 @@
+/**
+ * Copyright 2019 XEBIALABS
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package com.xebialabs.migration;
 
 import static org.junit.Assert.assertNotNull;
@@ -37,6 +47,7 @@ public class MigrationRunnerTest
         actions.add(ra);
 
         MigrationRunnerMock mr = new MigrationRunnerMock(SystemType.XLD, null, DbType.DERBY, null, null, System.out);
+
 
         mr.process(actions, true);
 
@@ -84,7 +95,13 @@ class MigrationRunnerMock extends MigrationRunner
 
     public MigrationRunnerMock(SystemType xlSystem, Connection dbconn, DbType dbType, Connection reportDbconn, DbType reportDbType, PrintStream os)
     {
-        MigrationRunnerFactory.getMigrationRunner(xlSystem, dbconn, dbType, reportDbconn, reportDbType, os);
+        //MigrationRunner runner = MigrationRunnerFactory.getMigrationRunner(xlSystem, dbconn, dbType, reportDbconn, reportDbType, os);
+        this.dbconn = dbconn;
+        this.xlSystem = xlSystem;
+        this.dbType = dbType;
+        this.os = os;
+        this.reportDbconn = reportDbconn;
+        this.reportDbType = reportDbType;
     }
 
     // mocked methods
