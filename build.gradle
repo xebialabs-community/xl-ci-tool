@@ -14,7 +14,6 @@ if (!project.hasProperty('release.useLastTag')) {
   project.ext['release.useLastTag'] = true
 }
 
-version = '1.1'
 
 task fatJar(type: Jar) {
     manifest {
