@@ -537,7 +537,7 @@ public class MigrationRunnerXLR extends MigrationRunner {
                 break;
 
             case UPDATENAME:
-                updateContentPropertyName(conAction, parentObject, JsonParser jsonParser);
+                updateContentPropertyName(conAction, parentObject, jsonParser);
                 break;
 
             case UPDATEVALUE:
