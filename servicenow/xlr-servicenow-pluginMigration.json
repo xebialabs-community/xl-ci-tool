@@ -1,0 +1,292 @@
+{
+    "systemType": "xlr",
+    "description": "migration script for xlr-servicenow-plugin, migration to bundled xlr-8.6 servicenow plugin from any previous version.",
+    "actions": [
+        {
+            "order": 1,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type CreateRecord to new type CreateChangeRequest",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "servicenow.CreateRecord",
+                "newValue": "servicenow.CreateChangeRequest"
+            }
+        },
+        {
+            "order": 2,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type servicenow.CreateRequest to new type CreateChangeRequest",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "servicenow.CreateRequest",
+                "newValue": "servicenow.CreateChangeRequest"
+            }
+        },
+        {
+            "order": 3,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type CreateNewRecord to new type CreateChangeRequest",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "servicenow.CreateNewRecord",
+                "newValue": "servicenow.CreateChangeRequest"
+            },
+            "contentActionsXLR": [
+                {
+                    "action": "updateName",
+                    "order": 1,
+                    "properties": {
+                      "name": "content",
+                      "newName": "additionalFields",
+                      "valueDataType": "map_string_string_value"
+                    }
+                }
+            ]
+        },
+                {
+            "order": 4,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type updateRecord to new type UpdateChangeRequest",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "servicenow.UpdateRecord",
+                "newValue": "servicenow.UpdateChangeRequest"
+            },
+            "contentActionsXLR": [
+                {
+                    "action": "updateName",
+                    "order": 1,
+                    "properties": {
+                      "name": "content",
+                      "newName": "additionalFields",
+                      "valueDataType": "map_string_string_value"
+                    }
+                }
+            ]
+        },
+                {
+            "order": 5,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type CreateNewIncident to new type CreateIncident",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "servicenow.CreateNewIncident",
+                "newValue": "servicenow.CreateIncident"
+            },
+            "contentActionsXLR": [
+                {
+                    "action": "updateName",
+                    "order": 1,
+                    "properties": {
+                      "name": "content",
+                      "newName": "additionalFields",
+                      "valueDataType": "map_string_string_value"
+                    }
+                }
+            ]
+        },
+                {
+            "order": 6,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type CreateNewServiceRequest to new type CreateServiceRequest",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "servicenow.CreateNewServiceRequest",
+                "newValue": "servicenow.CreateServiceRequest"
+            },
+            "contentActionsXLR": [
+                {
+                    "action": "updateName",
+                    "order": 1,
+                    "properties": {
+                      "name": "content",
+                      "newName": "additionalFields",
+                      "valueDataType": "map_string_string_value"
+                    }
+                }
+            ]
+        },
+                {
+            "order": 7,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type CreateNewRequestItem to new type CreateRequestItem",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "servicenow.CreateNewRequestItem",
+                "newValue": "servicenow.CreateRequestItem"
+            },
+            "contentActionsXLR": [
+                {
+                    "action": "updateName",
+                    "order": 1,
+                    "properties": {
+                      "name": "content",
+                      "newName": "additionalFields",
+                      "valueDataType": "map_string_string_value"
+                    }
+                }
+            ]
+        },
+                {
+            "order": 8,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type CreateNewChangeRequest to new type CreateChangeRequest",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "servicenow.CreateNewChangeRequest",
+                "newValue": "servicenow.CreateChangeRequest"
+            },
+            "contentActionsXLR": [
+                {
+                    "action": "updateName",
+                    "order": 1,
+                    "properties": {
+                      "name": "content",
+                      "newName": "additionalFields",
+                      "valueDataType": "map_string_string_value"
+                    }
+                }
+            ]
+        },
+                {
+            "order": 9,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type CreateTask to new type CreateChangeTask",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "servicenow.CreateTask",
+                "newValue": "servicenow.CreateChangeTask"
+            },
+            "contentActionsXLR": [
+                {
+                    "action": "updateName",
+                    "order": 1,
+                    "properties": {
+                      "name": "content",
+                      "newName": "additionalFields",
+                      "valueDataType": "map_string_string_value"
+                    }
+                }
+            ]
+        },
+                {
+            "order": 10,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type UpdateTask to new type UpdateChangeTask",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "servicenow.UpdateTask",
+                "newValue": "servicenow.UpdateChangeTask"
+            },
+            "contentActionsXLR": [
+                {
+                    "action": "updateName",
+                    "order": 1,
+                    "properties": {
+                      "name": "content",
+                      "newName": "additionalFields",
+                      "valueDataType": "map_string_string_value"
+                    }
+                }
+            ]
+        },
+                {
+            "order": 11,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type UpdateIncident property content",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "servicenow.UpdateIncident",
+                "newValue": "servicenow.UpdateIncident"
+            },
+            "contentActionsXLR": [
+                {
+                    "action": "updateName",
+                    "order": 1,
+                    "properties": {
+                      "name": "content",
+                      "newName": "additionalFields",
+                      "valueDataType": "map_string_string_value"
+                    }
+                }
+            ]
+        },
+                {
+            "order": 12,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type UpdateServiceRequest property content",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "servicenow.UpdateServiceRequest",
+                "newValue": "servicenow.UpdateServiceRequest"
+            },
+            "contentActionsXLR": [
+                {
+                    "action": "updateName",
+                    "order": 1,
+                    "properties": {
+                      "name": "content",
+                      "newName": "additionalFields",
+                      "valueDataType": "map_string_string_value"
+                    }
+                }
+            ]
+        },
+                        {
+            "order": 13,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type UpdateRequestItem property content",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "servicenow.UpdateRequestItem",
+                "newValue": "servicenow.UpdateRequestItem"
+            },
+            "contentActionsXLR": [
+                {
+                    "action": "updateName",
+                    "order": 1,
+                    "properties": {
+                      "name": "content",
+                      "newName": "additionalFields",
+                      "valueDataType": "map_string_string_value"
+                    }
+                }
+            ]
+        },
+                        {
+            "order": 14,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type UpdateChangeRequest property content",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "servicenow.UpdateChangeRequest",
+                "newValue": "servicenow.UpdateChangeRequest"
+            },
+            "contentActionsXLR": [
+                {
+                    "action": "updateName",
+                    "order": 1,
+                    "properties": {
+                      "name": "content",
+                      "newName": "additionalFields",
+                      "valueDataType": "map_string_string_value"
+                    }
+                }
+            ]
+        }
+    ]
+}
