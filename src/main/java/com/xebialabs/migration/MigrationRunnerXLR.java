@@ -537,7 +537,7 @@ public class MigrationRunnerXLR extends MigrationRunner {
                 break;
 
             case UPDATENAME:
-                updateContentPropertyName(conAction, parentObject);
+                updateContentPropertyName(conAction, parentObject, JsonParser jsonParser);
                 break;
 
             case UPDATEVALUE:
@@ -656,7 +656,7 @@ public class MigrationRunnerXLR extends MigrationRunner {
         } 
     }
 
-    private void updateContentPropertyName(ContentActionXLR conAction, JsonObject parentObject){
+    private void updateContentPropertyName(ContentActionXLR conAction, JsonObject parentObject, JsonParser jsonParser){
         PropertyValueType valueType = PropertyValueType.valueOf(conAction.getProperties().get(VALUE_DATA_TYPE).toUpperCase());
         String name = conAction.getProperties().get(NAME);
         if(parentObject.has(name))
@@ -672,7 +672,26 @@ public class MigrationRunnerXLR extends MigrationRunner {
                         throw new IllegalArgumentException(msg);
                     }
                     break;
-    
+            
+                case MAP_STRING_STRING_VALUE:
+                    try{
+                        String jsonString = parentObject.get(name).getAsString();
+                        JsonObject newObj = new JsonObject();
+                        if(jsonString != null && !(jsonString.trim().equals(""))){
+                            newObj = jsonParser.parse(jsonString).getAsJsonObject();
+                        }
+                        if (newObj.has("short_description")){
+                           parentObject.add("shortDescription", newObj.get("short_description"));
+                           newObj.remove("short_description");
+                        }                        
+                        parentObject.remove(name);
+                        parentObject.add(conAction.getProperties().get(NEW_NAME), newObj);
+                    } catch (Exception e){
+                        String msg = String.format("ContentActionXLR - Failed to migrate current value of %s to map_string and could not update.", name);
+                        throw new IllegalArgumentException(msg);
+                    }   
+                    break;    
+                    
                 case INTEGER_VALUE:
                     try{
                         int currentIntValue = parentObject.get(name).getAsInt();
