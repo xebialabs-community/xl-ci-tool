@@ -126,7 +126,7 @@ public class MigrationConfigParser {
 
                 if(config.hasPath("xl.database.db-url"))
                 {
-                    dbUrl = cleanValue(config.getString("xl.database.db-url"));
+                    dbUrl = config.getString("xl.database.db-url");
                 }
 
                 if(config.hasPath("xl.database.db-username"))
@@ -141,7 +141,7 @@ public class MigrationConfigParser {
 
                 if(config.hasPath("xl.reporting.db-url"))
                 {
-                    reportDbUrl = cleanValue(config.getString("xl.reporting.db-url"));
+                    reportDbUrl = config.getString("xl.reporting.db-url");
                 }
 
                 if(config.hasPath("xl.reporting.db-username"))
@@ -158,7 +158,7 @@ public class MigrationConfigParser {
 
                 if(config.hasPath("xl.repository.database.db-url"))
                 {
-                    dbUrl = cleanValue(config.getString("xl.repository.database.db-url"));
+                    dbUrl = config.getString("xl.repository.database.db-url");
                 }
 
                 if(config.hasPath("xl.repository.database.db-username"))
