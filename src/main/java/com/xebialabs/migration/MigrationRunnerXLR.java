@@ -254,7 +254,11 @@ public class MigrationRunnerXLR extends MigrationRunner {
 
                                 // We now have the updated blob, commit it to the database
                                 byte[] newByteArray = CompressionUtils.compress(updatedBlobString.getBytes());
-                                Blob blobFromBytes = new javax.sql.rowset.serial.SerialBlob(newByteArray);
+
+                                Blob blobFromBytes = dbconn.createBlob();
+                                int numWritten = blobFromBytes.setBytes(1, newByteArray);
+
+                                // Blob blobFromBytes = new javax.sql.rowset.serial.SerialBlob(newByteArray);
                                 pstmtUpdateContent = dbconn.prepareStatement(stringArray[2]);
                                 pstmtUpdateContent.setBlob(1, blobFromBytes);
                                 pstmtUpdateContent.setInt(2, release_uid);
