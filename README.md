@@ -149,14 +149,14 @@ The migration mapping file is essentially a list of actions to be carried out on
 |             |          | oldValue      | string  | name of ci to copy |
 |             |          | newValue      | string  | new name of ci (may be same as old name |
 |             | delete   | ciName        | string  | name of ci to delete |
-| ci_property | update   | ciName        | string  | name of ci this property belows to |
+| ci_property | update   | ciName        | string  | name of ci this property belongs to |
 |             |          | oldValue      | string  | name of the property to update |
 |             |          | newValue      | string  | new name of property |
 |             | create   | ciName        | string  | name of ci that gets new property |
 |             |          | propertyName  | string  | name of new property |
 |             |          | _one of the following_  |
 |             |          | string_value  | string  | property value as string |
-|             |          | bo0lean_value | boolean | e.g. true or false |
+|             |          | boolean_value | boolean | e.g. true or false |
 |             |          | integer_value | integer | integer number |
 |             |          | date_value    | date    | ISO date value |
 |             | delete   | ciName        | string  | name of ci that has property |

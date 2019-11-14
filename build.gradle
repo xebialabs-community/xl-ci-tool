@@ -15,6 +15,7 @@ if (!project.hasProperty('release.useLastTag')) {
 }
 
 
+
 task fatJar(type: Jar) {
     manifest {
         attributes 'Implementation-Title': 'CI Migration Tool',
