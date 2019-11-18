@@ -110,7 +110,9 @@ public class MigrationRunnerXLR extends MigrationRunner {
                             String updatedBlobString = updateBlob(blobString, "type", newValue);
 
                             byte[] newByteArray = CompressionUtils.compress(updatedBlobString.getBytes());
-                            Blob blobFromBytes = new javax.sql.rowset.serial.SerialBlob(newByteArray);
+                            Blob blobFromBytes = dbconn.createBlob();
+                            int numWritten = blobFromBytes.setBytes(1, newByteArray);
+                            //Blob blobFromBytes = new javax.sql.rowset.serial.SerialBlob(newByteArray);
 
                             secondPstmtUpdate = dbconn.prepareStatement(stringArray[1]);
                             secondPstmtUpdate.setString(1, action.getProperties().get("newValue"));
@@ -291,7 +293,9 @@ public class MigrationRunnerXLR extends MigrationRunner {
                                             updateParentObject(parentObject2, contentActions, jsonParser, action);
 
                                             byte[] newByteArray2 = CompressionUtils.compress(objectFromString2.toString().getBytes());
-                                            Blob blobFromBytes2 = new javax.sql.rowset.serial.SerialBlob(newByteArray2);
+                                            Blob blobFromBytes2 = dbconn.createBlob();
+                                            int numWritten = blobFromBytes2.setBytes(1, newByteArray2);
+                                            //Blob blobFromBytes2 = new javax.sql.rowset.serial.SerialBlob(newByteArray2);
                                             pstmtUpdateContent2 = dbconn.prepareStatement(stringArray[4]);
                                             pstmtUpdateContent2.setBlob(1, blobFromBytes2);
                                             pstmtUpdateContent2.setString(2, task_id);
@@ -414,7 +418,9 @@ public class MigrationRunnerXLR extends MigrationRunner {
 
                         // We now have the updated blob, commit it to the database
                         byte[] newByteArray = updatedBlobString.getBytes();
-                        Blob blobFromBytes = new javax.sql.rowset.serial.SerialBlob(newByteArray);
+                        Blob blobFromBytes = dbconn.createBlob();
+                        int numWritten = blobFromBytes.setBytes(1, newByteArray);
+                        //Blob blobFromBytes = new javax.sql.rowset.serial.SerialBlob(newByteArray);
                         pstmtUpdateContent = reportDbconn.prepareStatement(stringArray[8]);
                         pstmtUpdateContent.setBlob(1, blobFromBytes);
                         pstmtUpdateContent.setString(2, releaseid);
