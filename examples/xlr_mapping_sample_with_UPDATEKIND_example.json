@@ -1,0 +1,145 @@
+{
+    "systemType": "xlr",
+    "description": "migration script for xlr-jira-plugin, migration from community to official xlr-jira-plugin",
+    "actions": [
+        {
+            "order": 1,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type CreateIssueJson to new task type - 1",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "jira.CreateIssueJson",
+                "newValue": "jira.CreateIssueJson"
+            },
+            "contentActionsXLR": [
+                {
+                    "action": "updateName",
+                    "order": 1,
+                    "properties": {
+                        "name": "jsonObj",
+                        "newName": "jsonObject",
+                        "valueDataType": "string_value"
+                    }
+                }
+            ]
+        },
+        {
+            "order": 2,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type CreateSubtask to new task type - 2",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "jira.CreateSubtask",
+                "newValue": "jira.CreateSubtask"
+            },
+            "contentActionsXLR": [
+                {
+                    "action": "delete",
+                    "order": 1,
+                    "properties": {
+                        "name": "issueTypeId"
+                    }
+                }
+            ]
+        },
+        {
+            "order": 3,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type CheckQuery to new task type - 3",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "jira.CheckQuery",
+                "newValue": "jira.CheckQuery"
+            },
+            "contentActionsXLR": [
+                {
+                    "action": "delete",
+                    "order": 1,
+                    "properties": {
+                        "name": "expectedStatus"
+                    }
+                }
+            ]
+        },
+        {
+            "order": 4,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type CheckQueryNoPoll to existing Query task type - 4",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "jira.CheckQueryNoPoll",
+                "newValue": "jira.Query"
+            }
+        },
+        {
+            "order": 5,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type queryForIssueIds to new task type - 5",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "jira.queryForIssueIds",
+                "newValue": "jira.QueryForIssueIds"
+            }
+        },
+        {
+            "order": 6,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type getVersions to new task type - 6",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "jira.getVersions",
+                "newValue": "jira.GetVersions"
+            }
+        },
+        {
+            "order": 7,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type getAllSprints to new task type - 7",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "jira.getAllSprints",
+                "newValue": "jira.GetAllSprints"
+            }
+        },
+        {
+            "order": 8,
+            "action": "update",
+            "type": "task",
+            "description": "migrate existing task type jira.CheckIssue to new official jira.CheckIssue. Note: In this case we are changing the properties of the task only - 8",
+            "properties": {
+                "taskParentType": "pythonScript",
+                "oldValue": "jira.CheckIssue",
+                "newValue": "jira.CheckIssue"
+            },
+            "contentActionsXLR": [
+                {
+                    "action": "updateName",
+                    "order": 1,
+                    "description": "In this example we first change the name of the property, the next action changes its kind",
+                    "properties": {
+                        "name": "expectedStatus",
+                        "newName": "expectedStatusList",
+                        "valueDataType": "string_value"
+                    }
+                },
+                {
+                    "action": "updateKind",
+                    "order": 2,
+                    "description": "Identify the property using its new, current name in order to change its kind. We retain its current value.",
+                    "properties": {
+                        "name": "expectedStatusList",
+                        "oldKindType": "string_value",
+                        "newKindType": "list_of_string_value"
+                    }
+                }
+            ]
+        }
+    ]
+}

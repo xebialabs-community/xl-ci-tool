@@ -28,6 +28,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.xebialabs.migration.action.ContentActionType;
 import com.xebialabs.migration.action.ContentActionXLR;
+import com.xebialabs.migration.action.KindConversionType;
 import com.xebialabs.migration.action.PropertyValueType;
 import com.xebialabs.migration.action.RepositoryAction;
 import com.xebialabs.migration.util.CompressionUtils;
@@ -48,6 +49,8 @@ public class MigrationRunnerXLR extends MigrationRunner {
     private static final String NAME = "name";
     private static final String NEW_NAME = "newName";
     private static final String VALUE = "value";
+    private static final String OLD_KIND_TYPE = "oldKindType";
+    private static final String NEW_KIND_TYPE = "newKindType";
 
     protected MigrationRunnerXLR(SystemType xlSystem, Connection dbconn,  DbType dbType, 
         Connection reportDbconn, DbType reportDbType, PrintStream os) {
@@ -109,9 +112,14 @@ public class MigrationRunnerXLR extends MigrationRunner {
                             // Now, update blob
                             String updatedBlobString = updateBlob(blobString, "type", newValue);
 
+                            //System.out.println("******BEGIN - this is the updated content blob for xlr - update ci");
+                            //System.out.println(updatedBlobString);
+                            
                             byte[] newByteArray = CompressionUtils.compress(updatedBlobString.getBytes());
                             Blob blobFromBytes = dbconn.createBlob();
                             int numWritten = blobFromBytes.setBytes(1, newByteArray);
+                            //System.out.println("******END - numWritten to blob = "+numWritten+", size = "+blobFromBytes.length()+", this is the updated content blob for xlr - update ci");
+                        
                             //Blob blobFromBytes = new javax.sql.rowset.serial.SerialBlob(newByteArray);
 
                             secondPstmtUpdate = dbconn.prepareStatement(stringArray[1]);
@@ -254,12 +262,17 @@ public class MigrationRunnerXLR extends MigrationRunner {
                                 String updatedBlobString = updateReleaseDataBlob(blobString, taskParentTypeStr, oldValue, 
                                     contentActions, action);
 
+                                //System.out.println("******BEGIN - this is the updated content blob for xlr - update task");
+                                //System.out.println(updatedBlobString);
+                                //System.out.println("******END - this is the updated content blob for xlr - update task");
+
                                 // We now have the updated blob, commit it to the database
                                 byte[] newByteArray = CompressionUtils.compress(updatedBlobString.getBytes());
 
                                 Blob blobFromBytes = dbconn.createBlob();
                                 int numWritten = blobFromBytes.setBytes(1, newByteArray);
-
+                                //System.out.println("******END - numWritten to blob = "+numWritten+", size = "+blobFromBytes.length()+", this is the updated content blob for xlr - update task");
+                        
                                 // Blob blobFromBytes = new javax.sql.rowset.serial.SerialBlob(newByteArray);
                                 pstmtUpdateContent = dbconn.prepareStatement(stringArray[2]);
                                 pstmtUpdateContent.setBlob(1, blobFromBytes);
@@ -292,9 +305,15 @@ public class MigrationRunnerXLR extends MigrationRunner {
                                             // (NOT the xlrContentActions)
                                             updateParentObject(parentObject2, contentActions, jsonParser, action);
 
+                                            //System.out.println("******BEGIN - this is the updated content blob for xlr - update task - backup");
+                                            //System.out.println(objectFromString2.toString());
+                                            //System.out.println("******END - this is the updated content blob for xlr - update update task - backup");
+
                                             byte[] newByteArray2 = CompressionUtils.compress(objectFromString2.toString().getBytes());
                                             Blob blobFromBytes2 = dbconn.createBlob();
                                             int numWritten = blobFromBytes2.setBytes(1, newByteArray2);
+                                            //System.out.println("******END - numWritten to blob = "+numWritten+", size = "+blobFromBytes2.length()+", this is the updated content blob for xlr - update task - backup");
+                        
                                             //Blob blobFromBytes2 = new javax.sql.rowset.serial.SerialBlob(newByteArray2);
                                             pstmtUpdateContent2 = dbconn.prepareStatement(stringArray[4]);
                                             pstmtUpdateContent2.setBlob(1, blobFromBytes2);
@@ -416,10 +435,15 @@ public class MigrationRunnerXLR extends MigrationRunner {
                         String updatedBlobString = updateReleaseDataBlob(blobString, taskParentTypeStr, oldValue, 
                         contentActions, action);
 
+                        //System.out.println("******BEGIN - this is the updated content blob for xlr - update  report task");
+                        //System.out.println(updatedBlobString);
+                        
+
                         // We now have the updated blob, commit it to the database
                         byte[] newByteArray = updatedBlobString.getBytes();
-                        Blob blobFromBytes = dbconn.createBlob();
+                        Blob blobFromBytes = reportDbconn.createBlob();
                         int numWritten = blobFromBytes.setBytes(1, newByteArray);
+                        //System.out.println("******END - numWritten to blob = "+numWritten+", size = "+blobFromBytes.length()+", this is the updated content blob for xlr - update report task");
                         //Blob blobFromBytes = new javax.sql.rowset.serial.SerialBlob(newByteArray);
                         pstmtUpdateContent = reportDbconn.prepareStatement(stringArray[8]);
                         pstmtUpdateContent.setBlob(1, blobFromBytes);
@@ -554,6 +578,10 @@ public class MigrationRunnerXLR extends MigrationRunner {
                 updateContentPropertyValue(conAction, parentObject, jsonParser);
                 break;
 
+            case UPDATEKIND:
+                updateContentPropertyKind(conAction, parentObject, jsonParser);
+                break;
+
             default:
                 String msg = String.format(
                         "ContentActionXLR %s is not supported for type %s",
@@ -583,6 +611,10 @@ public class MigrationRunnerXLR extends MigrationRunner {
                 conAction.assertHasProperty(NAME);
                 conAction.assertHasProperty(NEW_VALUE);
                 conAction.assertHasProperty(VALUE_DATA_TYPE);
+            } else if (ContentActionType.UPDATEKIND.equals(conAction.getAction())) {
+                conAction.assertHasProperty(NAME);
+                conAction.assertHasProperty(OLD_KIND_TYPE);
+                conAction.assertHasProperty(NEW_KIND_TYPE);
             } else {
                 String msg = String.format("ContentActionXLR %s is not currently supported.",
                         conAction.getAction().name());
@@ -620,6 +652,17 @@ public class MigrationRunnerXLR extends MigrationRunner {
     
                 case STRING_VALUE:
                     parentObject.addProperty(name, conAction.getProperties().get(VALUE));
+                    break;
+
+                case LIST_OF_STRING_VALUE:
+                    try{
+                        String jsonString = conAction.getProperties().get(VALUE);
+                        JsonArray newArray = jsonParser.parse(jsonString).getAsJsonArray();
+                        parentObject.add(name, newArray);
+                    } catch (Exception e){
+                        String msg = String.format("ContentActionXLR - Failed to convert string value %s to list(array)", conAction.getProperties().get(VALUE));
+                        throw new IllegalArgumentException(msg);
+                    }
                     break;
     
                 case BOOLEAN_VALUE:
@@ -699,6 +742,12 @@ public class MigrationRunnerXLR extends MigrationRunner {
                     parentObject.remove(name);
                     parentObject.addProperty(conAction.getProperties().get(NEW_NAME), currentStrValue);
                     break;
+
+                case LIST_OF_STRING_VALUE:
+                    JsonArray currentArrayValue = parentObject.get(name).getAsJsonArray();
+                    parentObject.remove(name);
+                    parentObject.add(conAction.getProperties().get(NEW_NAME), currentArrayValue);
+                    break;
     
                 case BOOLEAN_VALUE:
                     try{
@@ -767,6 +816,21 @@ public class MigrationRunnerXLR extends MigrationRunner {
                     parentObject.remove(name);
                     parentObject.addProperty(name, strValue);
                     break;
+
+                case LIST_OF_STRING_VALUE:
+                    try{
+                        String jsonString = conAction.getProperties().get(NEW_VALUE);
+                        JsonArray newArray = new JsonArray();
+                        if(jsonString != null && !(jsonString.trim().equals(""))){
+                            newArray = jsonParser.parse(jsonString).getAsJsonArray();
+                        } 
+                        parentObject.remove(name);
+                        parentObject.add(name, newArray);
+                    } catch (Exception e){
+                        String msg = String.format("ContentActionXLR - Failed to get new value of %s as list(array) and so could not update the value", name);
+                        throw new IllegalArgumentException(msg);
+                    }
+                    break;
     
                 case BOOLEAN_VALUE:
                     try{
@@ -791,6 +855,42 @@ public class MigrationRunnerXLR extends MigrationRunner {
         {
             String msg = String.format(
                             "ContentActionXLR property '%s' does not exist and so the value cannot be updated.",
+                            name);
+            os.println("\nWARNING - "+msg);
+                    //throw new IllegalArgumentException(msg);
+        }  
+    }   
+
+    private void updateContentPropertyKind(ContentActionXLR conAction, JsonObject parentObject, JsonParser jsonParser){
+        KindConversionType conversionType = KindConversionType.valueOf(conAction.getProperties().get(OLD_KIND_TYPE).toUpperCase() + "_TO_" +
+                conAction.getProperties().get(NEW_KIND_TYPE).toUpperCase());
+        String name = conAction.getProperties().get(NAME);
+        if(parentObject.has(name))
+        {
+            switch (conversionType) {
+                case STRING_VALUE_TO_LIST_OF_STRING_VALUE:
+                    String currentStrValue = parentObject.get(name).getAsString();
+                    JsonArray newArray = new JsonArray();
+                    if(currentStrValue != null && !(currentStrValue.trim().equals(""))){
+                        newArray.add(currentStrValue);
+                    }
+                    parentObject.remove(name);
+                    parentObject.add(name, newArray);
+                    break;
+    
+                default:
+                    String msg = String.format(
+                            "ContentActionXLR kind type conversion from %s to %s is not supported for action %s",
+                            conAction.getProperties().get(OLD_KIND_TYPE),
+                            conAction.getProperties().get(NEW_KIND_TYPE),
+                            conAction.getAction().name());
+                    throw new IllegalArgumentException(msg);
+                } 
+        }
+        else 
+        {
+            String msg = String.format(
+                            "ContentActionXLR property '%s' does not exist and so the kind type cannot be converted.",
                             name);
             os.println("\nWARNING - "+msg);
                     //throw new IllegalArgumentException(msg);
