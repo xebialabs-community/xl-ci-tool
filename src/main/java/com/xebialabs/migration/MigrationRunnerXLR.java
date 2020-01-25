@@ -105,10 +105,18 @@ public class MigrationRunnerXLR extends MigrationRunner {
                     if (result != null) {
                         while (result.next()) {
                             int ci_uid = result.getInt("ci_uid");
-                            Blob content = result.getBlob("content");
-                        
-                            String blobString = new String(CompressionUtils.decompress(convertBlobToByteArray(content)));
 
+                            byte [] currentBytes = null;
+
+                            if (dbType == DbType.POSTGRESQL){
+                                currentBytes = result.getBytes("content");
+                            }
+                            else {
+                                Blob blobContent = result.getBlob("content");
+                                currentBytes = convertBlobToByteArray(blobContent);
+                            }
+                        
+                            String blobString = new String(CompressionUtils.decompress(currentBytes));
                             // Now, update blob
                             String updatedBlobString = updateBlob(blobString, "type", newValue);
 
@@ -116,15 +124,21 @@ public class MigrationRunnerXLR extends MigrationRunner {
                             //System.out.println(updatedBlobString);
                             
                             byte[] newByteArray = CompressionUtils.compress(updatedBlobString.getBytes());
-                            Blob blobFromBytes = dbconn.createBlob();
-                            int numWritten = blobFromBytes.setBytes(1, newByteArray);
-                            //System.out.println("******END - numWritten to blob = "+numWritten+", size = "+blobFromBytes.length()+", this is the updated content blob for xlr - update ci");
-                        
-                            //Blob blobFromBytes = new javax.sql.rowset.serial.SerialBlob(newByteArray);
 
                             secondPstmtUpdate = dbconn.prepareStatement(stringArray[1]);
                             secondPstmtUpdate.setString(1, action.getProperties().get("newValue"));
-                            secondPstmtUpdate.setBlob(2, blobFromBytes);
+
+                            if (dbType == DbType.POSTGRESQL){
+                                secondPstmtUpdate.setBytes(2, newByteArray);
+                            }
+                            else {
+                                Blob blobFromBytes = dbconn.createBlob();
+                                int numWritten = blobFromBytes.setBytes(1, newByteArray);
+                                //System.out.println("******END - numWritten to blob = "+numWritten+", size = "+blobFromBytes.length()+", this is the updated content blob for xlr - update task");
+                                // old way Blob blobFromBytes = new javax.sql.rowset.serial.SerialBlob(newByteArray); 
+                                secondPstmtUpdate.setBlob(2, blobFromBytes);       
+                            }
+
                             secondPstmtUpdate.setInt(3, ci_uid);
 
                             cnt = secondPstmtUpdate.executeUpdate();
@@ -438,6 +452,8 @@ public class MigrationRunnerXLR extends MigrationRunner {
         PreparedStatement pstmtUpdateTask = null;
         Boolean origCommitState = reportDbconn.getAutoCommit();
 
+        // NOTE: unlike the xlrelease database, blobs stored in the xlarchive database are not compressed
+
         try {
             // Turn autocommit off
             reportDbconn.setAutoCommit(false);
@@ -466,7 +482,7 @@ public class MigrationRunnerXLR extends MigrationRunner {
                             currentBytes = convertBlobToByteArray(blobContent);
                         }
 
-                        String blobString = new String(CompressionUtils.decompress(currentBytes));
+                        String blobString = new String(currentBytes);
 
                         // Now, update blob
                         String updatedBlobString = updateReleaseDataBlob(blobString, taskParentTypeStr, oldValue, 
@@ -480,13 +496,13 @@ public class MigrationRunnerXLR extends MigrationRunner {
                         byte[] newByteArray = updatedBlobString.getBytes();
                         pstmtUpdateContent = reportDbconn.prepareStatement(stringArray[8]);
 
-                        if (dbType == DbType.POSTGRESQL){
+                        if (reportDbType == DbType.POSTGRESQL){
                             pstmtUpdateContent.setBytes(1, newByteArray);
                         }
                         else {
                             Blob blobFromBytes = reportDbconn.createBlob();
                             int numWritten = blobFromBytes.setBytes(1, newByteArray);
-                            ///System.out.println("******END - numWritten to blob = "+numWritten+", size = "+blobFromBytes.length()+", this is the updated content blob for xlr - update report task");
+                            //System.out.println("******END - numWritten to blob = "+numWritten+", size = "+blobFromBytes.length()+", this is the updated content blob for xlr - update report task");
                             //Blob blobFromBytes = new javax.sql.rowset.serial.SerialBlob(newByteArray); 
                             pstmtUpdateContent.setBlob(1, blobFromBytes);       
                         }
