@@ -1,4 +1,6 @@
 language: java
+script:
+  - ./gradlew fatJar
 deploy:
   provider: releases
   api_key:
